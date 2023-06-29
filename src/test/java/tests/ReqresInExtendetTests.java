@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import models.LoginBodyPojoModel;
 import models.LoginResponsePojoModel;
 import models.lombok.LoginBodyLombokModel;
@@ -73,6 +74,28 @@ public class ReqresInExtendetTests {
                 .extract().as(LoginResponseLombokModel.class);
 
 //        assertEquals("QpwL5tke4Pnpja7X4", response.getToken());
+        assertThat(response.getToken()).isEqualTo("QpwL5tke4Pnpja7X4");
+    }
+
+    @Test
+    void successfulLogInWithAllureTest(){
+        LoginBodyLombokModel loginBody = new LoginBodyLombokModel();
+        loginBody.setEmail("eve.holt@reqres.in");
+        loginBody.setPassword("cityslicka");
+
+        LoginResponseLombokModel response = given()
+                .filter(new AllureRestAssured())
+                .log().uri()
+                .body(loginBody)
+                .contentType(JSON)
+                .when()
+                .post("https://reqres.in/api/login")
+                .then()
+                .log().status()
+                .log().body()
+                .statusCode(200)
+                .extract().as(LoginResponseLombokModel.class);
+
         assertThat(response.getToken()).isEqualTo("QpwL5tke4Pnpja7X4");
     }
 
