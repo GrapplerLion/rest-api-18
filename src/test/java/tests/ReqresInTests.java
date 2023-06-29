@@ -77,4 +77,18 @@ public class ReqresInTests {
                 .log().body()
                 .statusCode(415);
     }
+    @Test
+    void CreateUsersTest(){
+        String body = "{ \"name\": \"morpheus\", \"job\": \"leader\" }";
+        given()
+                .log().uri()
+                .body(body)
+                .contentType(JSON)
+                .when()
+                .post("https://reqres.in/api/users")
+                .then()
+                .log().status()
+                .log().body()
+                .statusCode(201);
+    }
 }
